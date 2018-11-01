@@ -6,9 +6,13 @@ apply plugin: 'java'
 repositories {
     mavenCentral()
 }
+subprojects {
+    apply plugin: 'java'
 
-jar {
-    baseName = "$project.group.${project.name.toLowerCase()}"
+    jar {
+        baseName = "$rootProject.group.${project.name.toLowerCase()}"
+    }
 }
+
 dependencies {
 }
