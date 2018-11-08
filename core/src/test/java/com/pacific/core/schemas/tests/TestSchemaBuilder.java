@@ -53,5 +53,19 @@ public class TestSchemaBuilder {
         int fieldCount = Contact.class.getDeclaredFields().length;
         assertEquals("The attributes count don't match", fieldCount, contactSchema.getAttributes().size());
     }
+
+    @Test
+    public void testAttributeMetadata() {
+        String id = "com.pacific.core:Contact";
+        Schema contactSchema = schemaBuilder.getSchemas().stream().filter(schema -> schema.getId().equals(id)).limit(1).findFirst().get();
+
+        com.pacific.core.schemas.objects.Attribute firstNameAttr = contactSchema.getAttributes().stream().filter(attribute -> attribute.getName().equals("testField")).limit(1).findFirst().get();
+        assertNotNull("testField attribute not found in contact schema", firstNameAttr);
+        assertEquals("", true, firstNameAttr.isCreatable());
+        assertEquals("", true, firstNameAttr.isGenerated());
+        assertEquals("", true, firstNameAttr.isMultivalued());
+        assertEquals("", true, firstNameAttr.isRequired());
+        assertEquals("", true, firstNameAttr.isUpdatable());
+    }
     
 }

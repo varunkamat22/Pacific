@@ -22,4 +22,6 @@ public class Contact implements SchemaDiscoverable{
     @Attribute(name = "lastName", creatable = true, updatable = true)
     private String lastName;
 
+    @Attribute(name = "testField", required = true, creatable = true, updatable = true, generated = true, multivalued = true)
+    private String testField;
 }
