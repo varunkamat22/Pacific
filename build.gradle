@@ -1,0 +1,18 @@
+group 'com.pacific'
+version '1.0'
+
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+subprojects {
+    apply plugin: 'java'
+
+    jar {
+        baseName = "$rootProject.group.${project.name.toLowerCase()}"
+    }
+}
+
+dependencies {
+}
