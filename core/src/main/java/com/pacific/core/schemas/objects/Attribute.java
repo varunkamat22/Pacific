@@ -1,15 +1,21 @@
 package com.pacific.core.schemas.objects;
 
-/**
- * Created by vakamat on 11/1/2018.
- */
 public class Attribute {
     private String name;
+    private Type dataType;
     private boolean required;
     private boolean creatable;
     private boolean updatable;
     private boolean generated;
     private boolean multivalued;
+
+    public Type getDataType() {
+        return dataType;
+    }
+
+    public void setDataType(Type dataType) {
+        this.dataType = dataType;
+    }
 
     /*
      * Always use builder for instance of this Class.
@@ -65,6 +71,10 @@ public class Attribute {
         this.multivalued = multivalued;
     }
 
+    public enum Type{
+        STRING, ARRAY_OF_STRINGS, BOOLEAN, INTEGER, LONG;
+    }
+
     public static class AttributeBuilder {
         Attribute attribute;
 
@@ -95,6 +105,11 @@ public class Attribute {
         }
         public AttributeBuilder withMultivalued(boolean multivalued) {
             attribute.setMultivalued(multivalued);
+            return this;
+        }
+
+        public AttributeBuilder withType(Type dataType) {
+            attribute.setDataType(dataType);
             return this;
         }
 

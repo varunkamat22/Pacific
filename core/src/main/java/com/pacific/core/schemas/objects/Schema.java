@@ -5,9 +5,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Created by vakamat on 11/1/2018.
- */
 public class Schema {
     private final String id;
     private final String name;
@@ -32,16 +29,5 @@ public class Schema {
     public String getName() {
         return name;
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        if(obj instanceof Schema) {
-            if(StringUtils.isEmpty(((Schema)obj).getId()) || StringUtils.isEmpty(this.getId())) {
-                return false;
-            }else {
-                return ((Schema)obj).getId().equals(this.getId());
-            }
-        }
-        return false;
-    }
+    
 }
