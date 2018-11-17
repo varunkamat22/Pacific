@@ -48,6 +48,7 @@ public class SchemaBuilder {
                                 throw new RuntimeException(MessageFormat.format("Duplicate schema found {0}", id));
                             }
                             Schema schema = SchemaUtil.createSchemaObject(schemaResource);
+
                             schemaIds.add(id);
                             schemaCache.add(schema);
             });

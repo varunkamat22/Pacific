@@ -61,7 +61,7 @@ public class TestSchemaBuilder {
         com.pacific.core.schemas.objects.Attribute testFieldAttr = contactSchema.getAttributes().stream().filter(attribute -> attribute.getName().equals("testField")).limit(1).findFirst().get();
         assertNotNull("testField attribute not found in contact schema", testFieldAttr);
         assertEquals("testField Creatable metadata not correct in contact schema", true, testFieldAttr.isCreatable());
-        assertEquals("testField Generated metadata not correct in contact schema", true, testFieldAttr.isGenerated());
+        assertEquals("testField Generated metadata not correct in contact schema", false, testFieldAttr.isGenerated());
         assertEquals("testField Multivalued metadata not correct in contact schema", true, testFieldAttr.isMultivalued());
         assertEquals("testField Required metadata not correct in contact schema", true, testFieldAttr.isRequired());
         assertEquals("testField Updatable metadata not correct in contact schema", true, testFieldAttr.isUpdatable());
