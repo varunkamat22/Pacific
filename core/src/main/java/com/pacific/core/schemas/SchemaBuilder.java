@@ -16,7 +16,7 @@ import java.util.HashSet;
  * marked with @Schema.
  */
 @Singleton
-@Named
+@Named("com.pacific.core.schemas.SchemaBuilder")
 public class SchemaBuilder {
     private Set<Schema> schemaCache = null;
     private List<SchemaDiscoverable> schemaDiscoverables;
