@@ -1,15 +1,13 @@
 package com.pacific.core.schemas;
 
 import com.pacific.core.schemas.objects.Schema;
+import com.pacific.core.schemas.objects.StackedSchema;
 import com.pacific.core.schemas.util.SchemaUtil;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 import java.text.MessageFormat;
-import java.util.Set;
-import java.util.List;
-import java.util.Collections;
-import java.util.HashSet;
+import java.util.*;
 
 /**
  * This class will build schema objects for every resource
@@ -18,7 +16,7 @@ import java.util.HashSet;
 @Singleton
 @Named("com.pacific.core.schemas.SchemaBuilder")
 public class SchemaBuilder {
-    private Set<Schema> schemaCache = null;
+    private Map<String, Schema> schemaCache = null;
     private List<SchemaDiscoverable> schemaDiscoverables;
 
     @Inject
@@ -27,17 +25,22 @@ public class SchemaBuilder {
         buildSchema();
     }
 
-    public Set<Schema> getSchemas() {
-        return Collections.unmodifiableSet(schemaCache);
+    public Map<String, Schema> getSchemas() {
+        return Collections.unmodifiableMap(schemaCache);
     }
 
     private void buildSchema() {
-        schemaCache = new HashSet<>();
+        schemaCache = new HashMap<>();
         Set<String> schemaIds = new HashSet<>();
+
         System.out.println("Started to build schemas..");
+
         if (schemaDiscoverables == null || schemaDiscoverables.isEmpty()) {
             System.out.println("No objects found to build schemas..");
         } else {
+            //This stack will keep track of Schemas that have embedded objects.
+            Stack<StackedSchema> stackedSchemas = new Stack<>();
+
             schemaDiscoverables.stream()
                          .filter(schemaResource ->
                                  schemaResource.getClass().getDeclaredAnnotation(com.pacific.core.schemas.annotations.Schema.class) != null
@@ -47,11 +50,28 @@ public class SchemaBuilder {
                             if (schemaIds.contains(id)){
                                 throw new RuntimeException(MessageFormat.format("Duplicate schema found {0}", id));
                             }
-                            Schema schema = SchemaUtil.createSchemaObject(schemaResource);
+                            Schema schema = SchemaUtil.createSchemaObject(schemaResource, true, schemaCache);
+                            if(schema instanceof StackedSchema) {
+                                stackedSchemas.push((StackedSchema) schema);
+                            } else {
+                                schemaIds.add(id);
+                                schemaCache.put(id, schema);
+                            }
+                         });
 
-                            schemaIds.add(id);
-                            schemaCache.add(schema);
-            });
+            //At this point all embedded schemas are built. Now build parent schemas.
+            while(!stackedSchemas.isEmpty()) {
+                StackedSchema stackedSchema = stackedSchemas.pop();
+
+                String id = SchemaUtil.getSchemaId(stackedSchema.getSchemaDiscoverable());
+                if (schemaIds.contains(id)){
+                    throw new RuntimeException(MessageFormat.format("Duplicate schema found {0}", id));
+                }
+
+                Schema schema = SchemaUtil.createSchemaObject(stackedSchema.getSchemaDiscoverable(), false, schemaCache);
+                schemaIds.add(id);
+                schemaCache.put(id, schema);
+            }
         }
 
     }

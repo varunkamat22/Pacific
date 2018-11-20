@@ -31,14 +31,14 @@ public class TestSchemaBuilder {
     @Test
     public void testIfExpectedSchemaIsAvaialble() {
         String id = "com.pacific.core:Contact";
-        Schema contactSchema = schemaBuilder.getSchemas().stream().filter(schema -> schema.getId().equals(id)).limit(1).findFirst().get();
+        Schema contactSchema = schemaBuilder.getSchemas().get(id);
         assertNotNull("Contact schema not found", contactSchema);
     }
 
     @Test
     public void testBasicSchemaMetadata() {
         String id = "com.pacific.core:Contact";
-        Schema contactSchema = schemaBuilder.getSchemas().stream().filter(schema -> schema.getId().equals(id)).limit(1).findFirst().get();
+        Schema contactSchema = schemaBuilder.getSchemas().get(id);
 
         com.pacific.core.schemas.annotations.Schema schemaAnnotation = Contact.class.getDeclaredAnnotation(com.pacific.core.schemas.annotations.Schema.class);
         assertEquals("Contact schema name is not correct", schemaAnnotation.name(), contactSchema.getName());
@@ -47,7 +47,7 @@ public class TestSchemaBuilder {
     @Test
     public void testAttributeCount() {
         String id = "com.pacific.core:Contact";
-        Schema contactSchema = schemaBuilder.getSchemas().stream().filter(schema -> schema.getId().equals(id)).limit(1).findFirst().get();
+        Schema contactSchema = schemaBuilder.getSchemas().get(id);
 
         int fieldCount = Contact.class.getDeclaredFields().length;
         assertEquals("The attributes count don't match", fieldCount, contactSchema.getAttributes().size());
@@ -56,7 +56,7 @@ public class TestSchemaBuilder {
     @Test
     public void testAttributeMetadata() {
         String id = "com.pacific.core:Contact";
-        Schema contactSchema = schemaBuilder.getSchemas().stream().filter(schema -> schema.getId().equals(id)).limit(1).findFirst().get();
+        Schema contactSchema = schemaBuilder.getSchemas().get(id);
 
         com.pacific.core.schemas.objects.Attribute testFieldAttr = contactSchema.getAttributes().stream().filter(attribute -> attribute.getName().equals("testField")).limit(1).findFirst().get();
         assertNotNull("testField attribute not found in contact schema", testFieldAttr);

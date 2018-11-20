@@ -16,4 +16,5 @@ public @interface Attribute {
     boolean updatable() default false;
     boolean generated() default false;
     boolean multivalued() default false;
+    String referenceSchemaId() default "";
 }
