@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface Schema {
-    String name() default "";
-    String nameSpace() default "";
+    String name();
+    String nameSpace();
     boolean publishSchema() default true;
 }

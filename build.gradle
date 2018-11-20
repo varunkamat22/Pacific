@@ -2,15 +2,51 @@ group 'com.pacific'
 version '1.0'
 
 apply plugin: 'java'
+apply plugin: 'checkstyle'
+apply plugin: 'pmd'
+apply plugin: 'findbugs'
 
 repositories {
     mavenCentral()
 }
+
 subprojects {
     apply plugin: 'java'
+    apply plugin: 'checkstyle'
+    apply plugin: 'pmd'
+    apply plugin: 'findbugs'
 
     jar {
         baseName = "$rootProject.group.${project.name.toLowerCase()}"
+    }
+
+    /*checkstyle {
+
+    }*/
+
+    tasks.withType(Checkstyle) {
+        configFile = new File("$rootProject.projectDir/gradle/tools-config/checkstyle/", "checkstyle.xml")
+        checkstyleTest.enabled false
+        reports {
+            xml.enabled false
+            html.enabled true
+        }
+    }
+
+    tasks.withType(FindBugs) {
+        findbugsTest.enabled false
+        reports {
+            xml.enabled false
+            html.enabled true
+        }
+    }
+
+    tasks.withType(Pmd){
+        pmdTest.enabled false
+        reports{
+            xml.enabled=true
+            html.enabled=true
+        }
     }
 }
 

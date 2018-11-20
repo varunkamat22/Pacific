@@ -2,7 +2,6 @@ package com.pacific.core.schemas.tests;
 
 import com.pacific.core.schemas.SchemaBuilder;
 import com.pacific.core.schemas.SchemaDiscoverable;
-import com.pacific.core.schemas.annotations.Attribute;
 import com.pacific.core.schemas.objects.Schema;
 import com.pacific.core.schemas.tests.config.DIConfig;
 import com.pacific.core.schemas.tests.resources.Contact;
@@ -12,7 +11,7 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import javax.inject.Inject;
-import java.lang.reflect.Field;
+import com.pacific.core.schemas.objects.Attribute.Type;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {DIConfig.class})
@@ -59,13 +58,14 @@ public class TestSchemaBuilder {
         String id = "com.pacific.core:Contact";
         Schema contactSchema = schemaBuilder.getSchemas().stream().filter(schema -> schema.getId().equals(id)).limit(1).findFirst().get();
 
-        com.pacific.core.schemas.objects.Attribute firstNameAttr = contactSchema.getAttributes().stream().filter(attribute -> attribute.getName().equals("testField")).limit(1).findFirst().get();
-        assertNotNull("testField attribute not found in contact schema", firstNameAttr);
-        assertEquals("", true, firstNameAttr.isCreatable());
-        assertEquals("", true, firstNameAttr.isGenerated());
-        assertEquals("", true, firstNameAttr.isMultivalued());
-        assertEquals("", true, firstNameAttr.isRequired());
-        assertEquals("", true, firstNameAttr.isUpdatable());
+        com.pacific.core.schemas.objects.Attribute testFieldAttr = contactSchema.getAttributes().stream().filter(attribute -> attribute.getName().equals("testField")).limit(1).findFirst().get();
+        assertNotNull("testField attribute not found in contact schema", testFieldAttr);
+        assertEquals("testField Creatable metadata not correct in contact schema", true, testFieldAttr.isCreatable());
+        assertEquals("testField Generated metadata not correct in contact schema", false, testFieldAttr.isGenerated());
+        assertEquals("testField Multivalued metadata not correct in contact schema", true, testFieldAttr.isMultivalued());
+        assertEquals("testField Required metadata not correct in contact schema", true, testFieldAttr.isRequired());
+        assertEquals("testField Updatable metadata not correct in contact schema", true, testFieldAttr.isUpdatable());
+        assertEquals("testField DataType metadata not correct in contact schema", Type.STRING, testFieldAttr.getDataType());
     }
     
 }
