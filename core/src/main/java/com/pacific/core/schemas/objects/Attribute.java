@@ -1,7 +1,5 @@
 package com.pacific.core.schemas.objects;
 
-import org.apache.commons.lang3.StringUtils;
-
 public class Attribute {
     private String name;
     private Type dataType;
