@@ -9,6 +9,7 @@ public class Attribute {
     private boolean generated;
     private boolean multivalued;
     private Schema subSchema;
+    private String refs;
 
     public Type getDataType() {
         return dataType;
@@ -80,6 +81,14 @@ public class Attribute {
         this.subSchema = subSchema;
     }
 
+    public String getRefs() {
+        return refs;
+    }
+
+    public void setRefs(String refs) {
+        this.refs = refs;
+    }
+
     public enum Type{
         STRING, BOOLEAN, INTEGER, LONG, EMBEDDED;
     }
@@ -124,6 +133,11 @@ public class Attribute {
 
         public AttributeBuilder withSubSchema(Schema subSchema) {
             attribute.setSubSchema(subSchema);
+            return this;
+        }
+
+        public AttributeBuilder withRefs(String refs) {
+            attribute.setRefs(refs);
             return this;
         }
 

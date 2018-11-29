@@ -25,14 +25,15 @@ public class TestSchemaBuilder {
 
     @Test
     public void testSchemaIsBuilt() {
-        assertEquals("SchemaBuilder built 0 schemas",1, schemaBuilder.getSchemas().size());
+        assertNotEquals("SchemaBuilder built 0 schemas",0, schemaBuilder.getSchemas().size());
     }
 
     @Test
     public void testIfExpectedSchemaIsAvaialble() {
-        String id = "com.pacific.core:Contact";
-        Schema contactSchema = schemaBuilder.getSchemas().get(id);
+        Schema contactSchema = schemaBuilder.getSchemas().get("com.pacific.core:Contact");
         assertNotNull("Contact schema not found", contactSchema);
+        Schema emailSchema = schemaBuilder.getSchemas().get("com.pacific.core:Email");
+        assertNotNull("Email schema not found", emailSchema);
     }
 
     @Test
@@ -67,5 +68,28 @@ public class TestSchemaBuilder {
         assertEquals("testField Updatable metadata not correct in contact schema", true, testFieldAttr.isUpdatable());
         assertEquals("testField DataType metadata not correct in contact schema", Type.STRING, testFieldAttr.getDataType());
     }
-    
+
+    @Test
+    public void testEmbeddedAttributeMetadata() {
+        String id = "com.pacific.core:Contact";
+        Schema contactSchema = schemaBuilder.getSchemas().get(id);
+
+        com.pacific.core.schemas.objects.Attribute emailAttr = contactSchema.getAttributes().stream().filter(attribute -> attribute.getName().equals("email")).limit(1).findFirst().get();
+        assertNotNull("email attribute not found in contact schema", emailAttr);
+        assertEquals("email DataType metadata not correct in contact schema", Type.EMBEDDED, emailAttr.getDataType());
+        assertNotNull("email subSchema is null in contact schema", emailAttr.getSubSchema());
+        assertEquals("email subSchema id is incorrect in Contact schema", "com.pacific.core:Email", emailAttr.getSubSchema().getId());
+    }
+
+    @Test
+    public void testNonEmbeddedReferencedAttributeMetadata() {
+        String id = "com.pacific.core:Contact";
+        Schema contactSchema = schemaBuilder.getSchemas().get(id);
+
+        com.pacific.core.schemas.objects.Attribute relatedContactsAttr = contactSchema.getAttributes().stream().filter(attribute -> attribute.getName().equals("relatedContacts")).limit(1).findFirst().get();
+        assertNotNull("relatedContacts attribute not found in contact schema", relatedContactsAttr);
+        assertEquals("relatedContacts DataType metadata not correct in contact schema", Type.STRING, relatedContactsAttr.getDataType());
+        assertNull("relatedContacts subSchema is not null in contact schema", relatedContactsAttr.getSubSchema());
+        assertEquals("relatedContacts refs is not correct in contact schema", id, relatedContactsAttr.getRefs());
+    }
 }

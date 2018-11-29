@@ -13,7 +13,10 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Field;
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Map;
 
 public class SchemaUtil {
 
@@ -22,7 +25,7 @@ public class SchemaUtil {
         List<com.pacific.core.schemas.objects.Attribute> attributes = new ArrayList<>();
         Validator<com.pacific.core.schemas.objects.Attribute> attributeValidator = new AttributeObjectValidatorImpl();
 
-        if(fields != null && fields.length != 0 &&
+        if (fields != null && fields.length != 0 &&
                 initialSchemaFormation && checkIfEmbeddedTypePresent(fields)) {
             return new StackedSchema(schemaResource);
         }
@@ -31,7 +34,8 @@ public class SchemaUtil {
             if (field.getDeclaredAnnotation(Attribute.class) == null) {
                 continue;
             } else {
-                com.pacific.core.schemas.objects.Attribute attribute = buildAttribute(field.getAnnotation(Attribute.class), schemaCache, getSchemaId(schemaResource));
+                com.pacific.core.schemas.objects.Attribute attribute = buildAttribute(field.getAnnotation(Attribute.class),
+                        schemaCache, getSchemaId(schemaResource));
                 ValidationResult validationResult = attributeValidator.validate(attribute);
                 if (!validationResult.isValid()) {
                     System.err.println("Error occurred while validating Attribute in schema. Below are the errors encountered:");
@@ -58,7 +62,8 @@ public class SchemaUtil {
         return schema;
     }
 
-    private static com.pacific.core.schemas.objects.Attribute buildAttribute(Attribute attributeData, Map<String, Schema> schemaCache, String parentSchemaId) {
+    private static com.pacific.core.schemas.objects.Attribute buildAttribute(Attribute attributeData, Map<String, Schema> schemaCache,
+                                                                             String parentSchemaId) {
         AttributeBuilder attributeBuilder = new AttributeBuilder();
         attributeBuilder =  attributeBuilder.withName(attributeData.name())
                                             .withType(attributeData.dataType())
@@ -68,13 +73,18 @@ public class SchemaUtil {
                                             .withRequired(attributeData.required())
                                             .withUpdatable(attributeData.updatable());
 
+
+
         if (attributeData.dataType() == com.pacific.core.schemas.objects.Attribute.Type.EMBEDDED) {
             if (StringUtils.isEmpty(attributeData.referenceSchemaId()) ||
                     !schemaCache.containsKey(attributeData.referenceSchemaId())) {
-                throw new RuntimeException(MessageFormat.format("Error while constructing Attribute {0} for schema {1}, reference Schema {2} not found",
+                throw new RuntimeException(
+                        MessageFormat.format("Error while constructing Attribute {0} for schema {1}, reference Schema {2} not found",
                         attributeData.name(), parentSchemaId, attributeData.referenceSchemaId()));
             }
             attributeBuilder.withSubSchema(schemaCache.get(attributeData.referenceSchemaId()));
+        } else if (!StringUtils.isEmpty(attributeData.referenceSchemaId())) {
+            attributeBuilder.withRefs(attributeData.referenceSchemaId());
         }
 
         return attributeBuilder.build();

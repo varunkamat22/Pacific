@@ -7,7 +7,13 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Stack;
+import java.util.Set;
+import java.util.Collections;
 
 /**
  * This class will build schema objects for every resource
@@ -47,11 +53,11 @@ public class SchemaBuilder {
                          )
                          .forEach(schemaResource -> {
                             String id = SchemaUtil.getSchemaId(schemaResource);
-                            if (schemaIds.contains(id)){
+                            if (schemaIds.contains(id)) {
                                 throw new RuntimeException(MessageFormat.format("Duplicate schema found {0}", id));
                             }
                             Schema schema = SchemaUtil.createSchemaObject(schemaResource, true, schemaCache);
-                            if(schema instanceof StackedSchema) {
+                            if (schema instanceof StackedSchema) {
                                 stackedSchemas.push((StackedSchema) schema);
                             } else {
                                 schemaIds.add(id);
@@ -60,7 +66,7 @@ public class SchemaBuilder {
                          });
 
             //At this point all embedded schemas are built. Now build parent schemas.
-            while(!stackedSchemas.isEmpty()) {
+            while (!stackedSchemas.isEmpty()) {
                 StackedSchema stackedSchema = stackedSchemas.pop();
 
                 String id = SchemaUtil.getSchemaId(stackedSchema.getSchemaDiscoverable());

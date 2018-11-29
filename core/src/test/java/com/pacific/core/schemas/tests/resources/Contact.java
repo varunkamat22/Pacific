@@ -24,5 +24,12 @@ public class Contact implements SchemaDiscoverable{
     private String lastName;
 
     @Attribute(name = "testField", required = true, dataType = Type.STRING, creatable = true, updatable = true, multivalued = true)
-    private String testField;
+    private String[] testField;
+
+    @Attribute(name = "email", referenceSchemaId = "com.pacific.core:Email", required = true, dataType = Type.EMBEDDED, creatable = true, updatable = true)
+    private Email email;
+
+    @Attribute(name = "relatedContacts", dataType = Type.STRING, referenceSchemaId = "com.pacific.core:Contact", multivalued = true, creatable = true, updatable = true)
+    private String[] relatedContacts;
+
 }
