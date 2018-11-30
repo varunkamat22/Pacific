@@ -2,12 +2,15 @@ package com.pacific.core.schemas.objects;
 
 public class Attribute {
     private String name;
+    private String description;
     private Type dataType;
     private boolean required;
     private boolean creatable;
     private boolean updatable;
     private boolean generated;
     private boolean multivalued;
+    private Schema subSchema;
+    private String refs;
 
     public Type getDataType() {
         return dataType;
@@ -71,8 +74,32 @@ public class Attribute {
         this.multivalued = multivalued;
     }
 
+    public Schema getSubSchema() {
+        return subSchema;
+    }
+
+    private void setSubSchema(Schema subSchema) {
+        this.subSchema = subSchema;
+    }
+
+    public String getRefs() {
+        return refs;
+    }
+
+    private void setRefs(String refs) {
+        this.refs = refs;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    private void setDescription(String description) {
+        this.description = description;
+    }
+
     public enum Type{
-        STRING, ARRAY_OF_STRINGS, BOOLEAN, INTEGER, LONG;
+        STRING, BOOLEAN, INTEGER, LONG, EMBEDDED;
     }
 
     public static class AttributeBuilder {
@@ -110,6 +137,21 @@ public class Attribute {
 
         public AttributeBuilder withType(Type dataType) {
             attribute.setDataType(dataType);
+            return this;
+        }
+
+        public AttributeBuilder withSubSchema(Schema subSchema) {
+            attribute.setSubSchema(subSchema);
+            return this;
+        }
+
+        public AttributeBuilder withRefs(String refs) {
+            attribute.setRefs(refs);
+            return this;
+        }
+
+        public AttributeBuilder withDescription(String description) {
+            attribute.setDescription(description);
             return this;
         }
 
