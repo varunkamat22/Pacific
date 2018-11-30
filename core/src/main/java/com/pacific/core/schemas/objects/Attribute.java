@@ -2,6 +2,7 @@ package com.pacific.core.schemas.objects;
 
 public class Attribute {
     private String name;
+    private String description;
     private Type dataType;
     private boolean required;
     private boolean creatable;
@@ -77,7 +78,7 @@ public class Attribute {
         return subSchema;
     }
 
-    public void setSubSchema(Schema subSchema) {
+    private void setSubSchema(Schema subSchema) {
         this.subSchema = subSchema;
     }
 
@@ -85,8 +86,16 @@ public class Attribute {
         return refs;
     }
 
-    public void setRefs(String refs) {
+    private void setRefs(String refs) {
         this.refs = refs;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    private void setDescription(String description) {
+        this.description = description;
     }
 
     public enum Type{
@@ -138,6 +147,11 @@ public class Attribute {
 
         public AttributeBuilder withRefs(String refs) {
             attribute.setRefs(refs);
+            return this;
+        }
+
+        public AttributeBuilder withDescription(String description) {
+            attribute.setDescription(description);
             return this;
         }
 

@@ -1,6 +1,6 @@
 package com.pacific.core.schemas.tests;
 
-import com.pacific.core.schemas.SchemaBuilder;
+import com.pacific.core.schemas.SchemaBuilderService;
 import com.pacific.core.schemas.SchemaDiscoverable;
 import com.pacific.core.schemas.tests.resources.ContactNoAttributes;
 import org.junit.Assert;
@@ -17,7 +17,7 @@ public class TestSchemaBuilderValidations {
     public void testAttributeMissingValidation() throws IllegalAccessException, InvocationTargetException, InstantiationException {
         List<SchemaDiscoverable> schemaDiscoverables = new ArrayList<>();
         schemaDiscoverables.add(new ContactNoAttributes());
-        Constructor schemaBuilderConstructor = SchemaBuilder.class.getDeclaredConstructors()[0];
+        Constructor schemaBuilderConstructor = SchemaBuilderService.class.getDeclaredConstructors()[0];
         schemaBuilderConstructor.setAccessible(true);
         try {
             schemaBuilderConstructor.newInstance(schemaDiscoverables);

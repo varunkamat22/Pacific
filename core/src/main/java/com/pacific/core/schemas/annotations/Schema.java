@@ -10,5 +10,6 @@ import java.lang.annotation.Target;
 public @interface Schema {
     String name();
     String nameSpace();
+    String description() default "";
     boolean publishSchema() default true;
 }

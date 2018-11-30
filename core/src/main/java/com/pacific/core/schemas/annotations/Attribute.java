@@ -11,6 +11,7 @@ import com.pacific.core.schemas.objects.Attribute.Type;
 public @interface Attribute {
     String name();
     Type dataType();
+    String description() default "";
     boolean required() default false;
     boolean creatable() default false;
     boolean updatable() default false;

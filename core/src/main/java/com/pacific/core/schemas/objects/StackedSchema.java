@@ -1,13 +1,12 @@
 package com.pacific.core.schemas.objects;
 
 import com.pacific.core.schemas.SchemaDiscoverable;
-import java.util.ArrayList;
 
 public class StackedSchema extends Schema{
     private SchemaDiscoverable schemaDiscoverable;
 
     public StackedSchema(SchemaDiscoverable schemaDiscoverable) {
-        super("", "", true, new ArrayList<>());
+        super("", "");
         this.schemaDiscoverable = schemaDiscoverable;
     }
 

@@ -47,8 +47,14 @@ public class SchemaUtil {
         }
         com.pacific.core.schemas.annotations.Schema schemaAnnotation = schemaResource.getClass()
                                                                        .getAnnotation(com.pacific.core.schemas.annotations.Schema.class);
-        Schema schema = new Schema(getSchemaId(schemaResource), schemaAnnotation.name(),
-                          schemaAnnotation.publishSchema(), attributes);
+
+        Schema.SchemaBuilder schemaBuilder = new Schema.SchemaBuilder(getSchemaId(schemaResource), schemaAnnotation.name());
+        schemaBuilder.withPublishSchema(schemaAnnotation.publishSchema());
+        if (!StringUtils.isEmpty(schemaAnnotation.description())) {
+            schemaBuilder.withDescription(schemaAnnotation.description());
+        }
+        schemaBuilder.withAttributes(attributes);
+        Schema schema = schemaBuilder.build();
 
         Validator<Schema> schemaValidator = new SchemaObjectValidatorImpl();
         ValidationResult validationResult = schemaValidator.validate(schema);
@@ -73,7 +79,9 @@ public class SchemaUtil {
                                             .withRequired(attributeData.required())
                                             .withUpdatable(attributeData.updatable());
 
-
+        if (!StringUtils.isEmpty(attributeData.description())) {
+            attributeBuilder.withDescription(attributeData.description());
+        }
 
         if (attributeData.dataType() == com.pacific.core.schemas.objects.Attribute.Type.EMBEDDED) {
             if (StringUtils.isEmpty(attributeData.referenceSchemaId()) ||

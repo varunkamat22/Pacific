@@ -21,12 +21,12 @@ import java.util.Collections;
  */
 @Singleton
 @Named("com.pacific.core.schemas.SchemaBuilder")
-public class SchemaBuilder {
+public class SchemaBuilderService {
     private Map<String, Schema> schemaCache = null;
     private List<SchemaDiscoverable> schemaDiscoverables;
 
     @Inject
-    private SchemaBuilder(List<SchemaDiscoverable> schemaDiscoverables){
+    private SchemaBuilderService(List<SchemaDiscoverable> schemaDiscoverables){
         this.schemaDiscoverables = schemaDiscoverables;
         buildSchema();
     }
